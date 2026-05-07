@@ -1,5 +1,5 @@
 
-name: Build and Test React Application
+name: Build, test and deploy React Application
 
 # Controls when the action will run. 
 on:
@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [25.2.1]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
