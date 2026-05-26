@@ -13,18 +13,17 @@
   },
   "license": "ISC",
   "author": "Moi",
-  "type": "commonjs",
-  "main": "src/App.js",
+  "main": "dist/App.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --coverage --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/reportWebVitals.js\" --collectCoverageFrom=\"!src/index.js\" --watchAll=false",
-    "eject": "react-scripts eject",
+    "start": "./node_modules/.bin/react-scripts start",
+    "build": "./node_modules/.bin/react-scripts build",
+    "test": "./node_modules/.bin/react-scripts test --coverage --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/reportWebVitals.js\" --collectCoverageFrom=\"!src/index.js\" --watchAll=false",
+    "eject": "./node_modules/.bin/react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "./node_modules/.bin/gh-pages -d build",
     "build-npm-ci": "rm -rf dist && mkdir dist && NODE_ENV=production ./node_modules/.bin/babel src --out-dir dist --copy-files",
     "jsdoc": "./node_modules/.bin/jsdoc -c ./jsdoc.config.json -r -d ./docs"
   },
