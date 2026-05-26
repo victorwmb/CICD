@@ -1,7 +1,32 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "brid-utils",
+  "version": "1.0.0",
+  "private": false,
+  "description": "j'ai rien mis",
+  "homepage": "https://victorwmb.github.io/CICD",
+  "bugs": {
+    "url": "https://github.com/victorwmb/CICD/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorwmb/CICD.git"
+  },
+  "license": "ISC",
+  "author": "Moi",
+  "type": "commonjs",
+  "main": "src/App.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --coverage --collectCoverageFrom=\"src/**/*.{js,jsx}\" --collectCoverageFrom=\"!src/reportWebVitals.js\" --collectCoverageFrom=\"!src/index.js\" --watchAll=false",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build-npm-ci": "rm -rf dist && mkdir dist && NODE_ENV=production ./node_modules/.bin/babel src --out-dir dist --copy-files"
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -9,14 +34,14 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@babel/cli": "^7.29.7",
+    "@babel/core": "^7.29.7",
+    "@babel/plugin-transform-react-jsx": "^7.29.7",
+    "gh-pages": "^6.3.0"
   },
   "eslintConfig": {
     "extends": [
