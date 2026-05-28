@@ -1,20 +1,17 @@
 
 name: Build, test and deploy React Application
 
-
 on:
-  
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
-
 jobs:
   build_test:
     permissions:               
-        contents: write        
-        pull-requests: write   
+      contents: write        
+      pull-requests: write   
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,36 +20,58 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
+
       - name: npm ci and test
         run: |
           npm ci
-          npm test  
+          npm test
         env: 
           REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
+
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Build and docs
         run: |
           npm run jsdoc
           npm run build --if-present
+          cp -r docs build/docs || true
         env: 
           REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+
       - name: build and publish package on NPM 📦
         run: |
           git config --global user.email "victor.wambersie@ynov.com"
           git config --global user.name "victorwmb"
           npm run build-npm
-          npm version patch --no-git-tag-version
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          if [[ "$COMMIT_MSG" == *"minor"* ]] || [[ "$COMMIT_MSG" == *"feat"* ]]; then
+            npm version minor --no-git-tag-version
+          elif [[ "$COMMIT_MSG" == *"major"* ]] || [[ "$COMMIT_MSG" == *"breaking"* ]]; then
+            npm version major --no-git-tag-version
+          else
+            npm version patch --no-git-tag-version
+          fi
           npm publish
           git add .
-          git commit -m "updated version"
-          git push
+          git commit -m "chore(release): update version [skip ci]"
+          git push origin main
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
